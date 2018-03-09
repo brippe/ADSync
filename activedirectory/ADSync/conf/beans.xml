@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+	<bean id="connectionFactory" class="com.sun.messaging.ConnectionFactory" />
+	
+	<bean id="config" class="com.ripware.apps.activedirectory.ConsumerConfig">
+	    <!--  cmd /f caused problems -->
+	    <property name="addCommand" value="cmd /c powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -WindowStyle Hidden -File c:\Temp\ADUser\AddADUser.ps1 -n " />
+	    <property name="addGroupCommand" value="cmd /c powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -WindowStyle Hidden -File c:\Temp\ADUser\AddADGroup.ps1 -g " />
+	    <property name="addGroupMembersCommand" value="cmd /c powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -WindowStyle Hidden -File c:\Temp\ADUser\ADGroupMembers.ps1 -g " />
+	    
+	    <!--  Determines if user information will be added to AD or not; true = added; false = not added -->
+	    <property name="addInfo" value="false" />
+	    <property name="path" value="OU=People,DC=Ripware,dc=local" /> <!-- Create users in this OU -->
+	    <property name="AGroupPath" value="OU=Groups,OU=ACollege,DC=Ripware,dc=local" />
+	    <property name="BGroupPath" value="OU=Groups,OU=BCollege,DC=Ripware,dc=local" />
+	    <property name="CGroupPath" value="OU=Groups,OU=CCollege,DC=Ripware,dc=local" />
+	    <property name="domain" value="Ripware.local" />
+	    
+	    <property name="messaging" value="true" />	<!-- turns messaging to rabbitmq.ripware.com on or off -->
+	    
+	    <!-- LMB User + Destination/Topic -->
+	    <!-- <property name="imqAddressList" value="mq://rabbitmq.ripware.com:7676/" /> Non-Encrypted -->
+	    <property name="imqAddressList" value="mq://<server>:7676/ssljms" /> <!-- ssljms tell broker to encrypt message -->
+		<property name="imqDefaultUsername" value="<user>" />
+		<property name="imqDefaultPassword" value="<pass>" />
+		<property name="imqDestination" value="com_sct_ldi_sis_Sync" /> <!-- Topic to connect to -->
+		
+		<property name="adsyncPort" value="8889" />
+		<property name="createOrModifyUsers" value="false" />		<!-- true to create and modify users; otherwise nothing will be done with user messages --> 
+	</bean>
+	
+	<bean id="xmlMessageCache" class="com.ripware.apps.activedirectory.cache.XMLMessageCache">
+	    <property name="useCache" value="true" />	 <!-- Duplicate messages are sent from LMB. This property
+	    												  when set to false tell the program to process every message
+	    												  duplicate or not. When true, the program only processes unique
+	    												  messages.
+	    												   -->
+	</bean>
+	
+	<!-- Used for caching person information to reduce db queries -->
+	<bean id="cacheManager" class="net.sf.ehcache.CacheManager" />
+	
+	<bean id="personCache" class="com.ripware.apps.activedirectory.cache.EhcacheWrapper">
+	    <constructor-arg><value>personCache</value></constructor-arg>
+	    <constructor-arg><ref bean="cacheManager"/></constructor-arg>	    
+	</bean>
+	
+	<!--  This is Database Configuration -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"><value>oracle.jdbc.OracleDriver</value></property>
+		<property name="url"><value>jdbc:oracle:thin:@(server).ripware.com:1521:(db)</value></property>
+		<property name="username"><value></value></property>
+		<property name="password"><value></value></property>
+	</bean>
+	
+	<bean id="courseDAO" class="com.ripware.apps.activedirectory.db.CourseDAO">
+	    <property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<bean id="personDAO" class="com.ripware.apps.activedirectory.db.PersonDAO">
+	    <property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!-- LDAP (Active Directory) Configuration -->
+	 <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+        <property name="contextSource" ref="contextSource" />
+    </bean>
+		   
+    <bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+        <property name="url" value="ldap://(server):389" />
+        <property name="userDn" value="CN=,CN=Users,DC=(domain),dc=local" />
+        <property name="password" value="" />
+        <property name="pooled" value="false" />
+    </bean>
+</beans>

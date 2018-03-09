@@ -1,0 +1,17 @@
+<!-- Configures storage for person data
+	 This reduces the number of times ADSync has to go to the
+	 database to get person information. Once person data is 
+	 retrieved, it's saved with ehcache for additional requests -->
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../../main/config/ehcache.xsd">
+    <cache name="personCache"
+           maxEntriesLocalHeap="10000"
+           maxElementsOnDisk="1000"
+           eternal="false"
+           overflowToDisk="true"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="600"
+           memoryStoreEvictionPolicy="LFU"
+            />
+    <diskStore path="c:/Program Files (x86)/ADSync/tmp/"/>
+</ehcache>

@@ -1,0 +1,294 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<!-- IMS-ES 1.1 DTD -->
+
+<!ENTITY % I_Value " valuetype  (0 | 1 )  #REQUIRED">
+
+<!ENTITY % I_Relation " relation  (1 | 2 | 3 )  '1'">
+
+<!ENTITY % I_Role " roletype  (01 | 
+              02 | 
+              03 | 
+              04 | 
+              05 | 
+              06 | 
+              07 | 
+              08 | 
+              Learner | 
+              Instructor | 
+              ContentDeveloper | 
+              Member | 
+              Manager | 
+              Mentor | 
+              Administrator | 
+              TeachingAssistant )  '01'">
+
+<!ENTITY % I_Recstatus " recstatus  (1 | 2 | 3 )  #IMPLIED">
+
+<!ENTITY % I_Tel " teltype  (1 | 2 | 3 | 4 | Voice | Fax | Mobile | Pager )  '1'">
+
+<!ENTITY % I_Img " imgtype CDATA  #IMPLIED">
+
+<!ELEMENT enterprise (comments? , properties , person* , group* , membership*)>
+
+<!ELEMENT type (#PCDATA)>
+
+<!ELEMENT sourcedid (source , id)>
+
+<!ATTLIST sourcedid  sourcedidtype  (New | Old | Duplicate )  #IMPLIED >
+<!ELEMENT source (#PCDATA)>
+
+<!ELEMENT id (#PCDATA)>
+
+<!ELEMENT userid (#PCDATA)>
+
+<!ATTLIST userid  useridtype         CDATA  #IMPLIED
+                   password           CDATA  #IMPLIED
+                   pwencryptiontype   CDATA  #IMPLIED
+                   authenticationtype CDATA  #IMPLIED >
+<!ELEMENT email (#PCDATA)>
+
+<!ELEMENT extension ANY>
+
+<!ELEMENT properties (comments? , datasource , target* , type? , datetime , extension?)>
+
+<!ATTLIST properties  lang CDATA  #IMPLIED >
+<!ELEMENT datasource (#PCDATA)>
+
+<!ELEMENT target (#PCDATA)>
+
+<!ELEMENT datetime (#PCDATA)>
+
+<!ELEMENT person (comments? , sourcedid+ , userid* , name , demographics? , email? , url? , tel* , adr? , photo? , systemrole? , institutionrole* , datasource? , extension?)>
+
+<!ATTLIST person  %I_Recstatus; >
+<!ELEMENT name (fn , sort? , nickname? , n?)>
+
+<!ELEMENT fn (#PCDATA)>
+
+<!ELEMENT sort (#PCDATA)>
+
+<!ELEMENT nickname (#PCDATA)>
+
+<!ELEMENT n (family? , given? , other* , prefix? , suffix? , partname*)>
+
+<!ELEMENT family (#PCDATA)>
+
+<!ELEMENT given (#PCDATA)>
+
+<!ELEMENT other (#PCDATA)>
+
+<!ELEMENT prefix (#PCDATA)>
+
+<!ELEMENT suffix (#PCDATA)>
+
+<!ELEMENT partname (#PCDATA)>
+
+<!ATTLIST partname  lang         CDATA  #IMPLIED
+                     partnametype CDATA  #REQUIRED >
+<!ELEMENT demographics (gender? , bday? , disability*)>
+
+<!ELEMENT gender (#PCDATA)>
+
+<!ELEMENT bday (#PCDATA)>
+
+<!ELEMENT disability (#PCDATA)>
+
+<!ELEMENT tel (#PCDATA)>
+
+<!ATTLIST tel  %I_Tel; >
+<!ELEMENT adr (pobox? , extadd? , street* , locality? , region? , pcode? , country?)>
+
+<!ELEMENT pobox (#PCDATA)>
+
+<!ELEMENT extadd (#PCDATA)>
+
+<!ELEMENT street (#PCDATA)>
+
+<!ELEMENT locality (#PCDATA)>
+
+<!ELEMENT region (#PCDATA)>
+
+<!ELEMENT pcode (#PCDATA)>
+
+<!ELEMENT country (#PCDATA)>
+
+<!ELEMENT photo (extref)>
+
+<!ATTLIST photo  %I_Img; >
+<!ELEMENT systemrole EMPTY>
+
+<!ATTLIST systemrole  systemroletype  (SysAdmin | 
+                                        SysSupport | 
+                                        Creator | 
+                                        AccountAdmin | 
+                                        User | 
+                                        None )  #REQUIRED >
+<!ELEMENT institutionrole EMPTY>
+
+<!ATTLIST institutionrole  primaryrole          (Yes | No )  #REQUIRED
+                            institutionroletype  (Student | 
+                                                  Faculty | 
+                                                  Staff | 
+                                                  Alumni | 
+                                                  ProspectiveStudent | 
+                                                  Guest | 
+                                                  Other | 
+                                                  Administrator | 
+                                                  Observer )  #REQUIRED >
+<!ELEMENT extref (#PCDATA)>
+
+<!ELEMENT group (comments? , sourcedid+ , grouptype* , description , org? , timeframe? , enrollcontrol? , email? , url? , relationship* , datasource? , extension?)>
+
+<!ATTLIST group  %I_Recstatus; >
+<!ELEMENT grouptype (scheme? , typevalue+)>
+
+<!ELEMENT scheme (#PCDATA)>
+
+<!ELEMENT typevalue (#PCDATA)>
+
+<!ATTLIST typevalue  level CDATA  #REQUIRED >
+<!ELEMENT description (short , long? , full?)>
+
+<!ELEMENT short (#PCDATA)>
+
+<!ELEMENT long (#PCDATA)>
+
+<!ELEMENT full (#PCDATA)>
+
+<!ELEMENT org (orgname? , orgunit* , type? , id?)>
+
+<!ELEMENT orgname (#PCDATA)>
+
+<!ELEMENT orgunit (#PCDATA)>
+
+<!ELEMENT timeframe (begin? , end? , adminperiod?)>
+
+<!ELEMENT begin (#PCDATA)>
+
+<!ATTLIST begin  restrict CDATA  #IMPLIED >
+<!ELEMENT end (#PCDATA)>
+
+<!ATTLIST end  restrict CDATA  #IMPLIED >
+<!ELEMENT adminperiod (#PCDATA)>
+
+<!ELEMENT enrollcontrol (enrollaccept? , enrollallowed?)>
+
+<!ELEMENT enrollaccept (#PCDATA)>
+
+<!ELEMENT enrollallowed (#PCDATA)>
+
+<!ELEMENT url (#PCDATA)>
+
+<!ELEMENT relationship (sourcedid , label)>
+
+<!ATTLIST relationship  %I_Relation; >
+<!ELEMENT label (#PCDATA)>
+
+<!ELEMENT membership (comments? , sourcedid , member+)>
+
+<!ELEMENT member (comments? , sourcedid , idtype , role+)>
+
+<!ELEMENT idtype (#PCDATA)>
+
+<!ELEMENT role (subrole? , status , userid? , comments? , datetime? , timeframe? , interimresult* , finalresult* , email? , datasource? , extension?)>
+
+<!ATTLIST role  %I_Recstatus;
+                 %I_Role; >
+<!ELEMENT subrole (#PCDATA)>
+
+<!ELEMENT status (#PCDATA)>
+
+<!ELEMENT comments (#PCDATA)>
+
+<!ATTLIST comments  lang CDATA  #IMPLIED >
+<!ELEMENT finalresult (mode? , values? , result? , comments?)>
+
+<!ELEMENT interimresult (mode? , values? , result? , comments?)>
+
+<!ATTLIST interimresult  resulttype CDATA  #IMPLIED >
+<!ELEMENT mode (#PCDATA)>
+
+<!ELEMENT values (list* , min? , max?)>
+
+<!ATTLIST values  %I_Value; >
+<!ELEMENT list (#PCDATA)>
+
+<!ELEMENT max (#PCDATA)>
+
+<!ELEMENT min (#PCDATA)>
+
+<!ELEMENT result (#PCDATA)>
+
+<!-- LDISP IMS-ES 1.1 extensions -->
+
+<!ELEMENT luminisproperties (requestor?)>
+
+<!ELEMENT requestor (sourcedid, idtype)>
+
+<!ELEMENT luminisperson (recordid?, viewid?, academicmajor*, academictitle*, academicdegree*, customrole*)>
+
+<!ELEMENT recordid EMPTY>
+<!ATTLIST recordid id CDATA #REQUIRED>
+
+<!ELEMENT viewid EMPTY>
+<!ATTLIST viewid id CDATA #REQUIRED>
+
+<!ELEMENT academicmajor (#PCDATA)>
+
+<!ELEMENT academictitle (#PCDATA)>
+
+<!ELEMENT academicdegree (#PCDATA)>
+
+<!ELEMENT customrole (#PCDATA)>
+
+<!ELEMENT luminisgroup (recordid?, viewid?, sort?, events?, deliverysystem?)>
+
+<!ELEMENT events (recurringevent+)>
+<!ELEMENT recurringevent (eventdescription, begindate, enddate, daysofweek, begintime, endtime, location?)>
+
+<!ELEMENT eventdescription  (#PCDATA)>
+
+<!ELEMENT begindate  (#PCDATA)>
+
+<!ELEMENT enddate  (#PCDATA)>
+
+<!ELEMENT daysofweek (#PCDATA)>
+
+<!ELEMENT begintime  (#PCDATA)>
+
+<!ELEMENT endtime  (#PCDATA)>
+
+<!ELEMENT location  (#PCDATA)>
+
+<!ELEMENT deliverysystem  (#PCDATA)>
+
+<!ELEMENT gradable  (#PCDATA)>
+
+<!ELEMENT luminisrole (recordid?, viewid?, gradable?)>
+
+<!-- LDISP processingresult -->
+
+<!ELEMENT processingresult (datasource, originalsource?, datetime, errordetail*, successdetail*)>
+<!ATTLIST processingresult statuscode (Success|PartialSuccess|Failure) #REQUIRED>
+
+<!ELEMENT originalsource (#PCDATA)>
+
+<!ELEMENT errordetail (sourcedid*, recordid?, originalsource?, errordescription?)>
+
+<!ATTLIST errordetail code (OpNotSupported|
+                          AuthorizationFailed|
+                          EntityDoesNotExist|
+                          NotAuthoritative|
+                          InfrastructureFailure|
+                          StaleView|
+                          XmlNotValid|
+                          InvalidMessage|
+                          ConstraintViolation|
+                          Other) #REQUIRED>
+
+<!ELEMENT errordescription (#PCDATA)>
+
+<!ELEMENT successdetail (sourcedid+, recordid?, originalsource?, successdescription?)>
+
+<!ELEMENT successdescription (#PCDATA)>
