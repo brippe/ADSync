@@ -33,7 +33,9 @@ To skip the unit tests in project you can build with the following command:
 
 ```mvn package -DskipTests```
 
-This command will create a activedirectory-<version>-with-dependencies.jar. This jar file contains ALL the Java dependencies for the Java application to work. More on building the project in the project's README.txt
+This command will create a `activedirectory-<version>-with-dependencies.jar`. This jar file contains ALL the Java dependencies for the Java application to work. More on building the project in the project's README.txt
+
 =======
+
 # ADSync
 Ellucian Banner to Active Directory synchronization
